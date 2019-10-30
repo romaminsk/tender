@@ -1,54 +1,17 @@
-import driver.WebDriverManager;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
-import org.openqa.selenium.WebDriver;
-import step.CompareStep;
-import step.ElektronikaStep;
-import step.MarketStep;
-import step.StartStep;
-import util.JsonDataReader;
-import util.WaitUtils;
+import org.testng.annotations.Test;
+import pageobject.MainPage;
 
-import java.util.Map;
+import static com.codeborne.selenide.Selenide.open;
 
-@Category(UiTest.class)
-public class UiTest extends BaseTest {
+public class UiTest {
 
-    protected static WebDriver driver;
+    private static final String SELENIDE = "Selenide";
 
-    private static Map<String, String> searchData;
-
-    private static StartStep startStep;
-    private static MarketStep marketStep;
-    private static ElektronikaStep elektronikaStep;
-    private static CompareStep compareStep;
-
-    @BeforeClass
-    public static void preparationForTest() {
-        driver = WebDriverManager.getDriver();
-        searchData = JsonDataReader.getSearchData();
-        startStep = new StartStep(driver);
-        marketStep = new MarketStep(driver);
-        elektronikaStep = new ElektronikaStep(driver);
-        compareStep = new CompareStep(driver);
-    }
 
     @Test
-    public void checkSearchResults(){
-        startStep.clickMarketButton();
-        marketStep.clickElektronikaButton();
-        elektronikaStep.clickTelevizoryButton();
-        String highPrice = searchData.get("highPrice");
-        elektronikaStep.setPriceToField(highPrice);
-        elektronikaStep.clickDiagonalSmallCheckbox();
-        WaitUtils.sleep(3000);
-        elektronikaStep.clickCheckBoxOfRecommendedTvList();
-        String recommendedTvListSize = elektronikaStep.getRecommendedTvListSize();
-        WaitUtils.sleep(3000);
-        elektronikaStep.clickCompareButton();
-        Assert.assertEquals(recommendedTvListSize, compareStep.getRatingValueListSize());
+    public void findSelenide() {
+        MainPage mainPage = open(("https://www.tut.by/"), MainPage.class);
+        mainPage.setSearchField(SELENIDE);
     }
 
 }
